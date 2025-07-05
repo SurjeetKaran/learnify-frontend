@@ -115,17 +115,17 @@ Click Deploy and you're live!
 We welcome contributions, suggestions, and feedback!
 If you’d like to contribute:
 
-Fork this repo
+- Fork this repo
 
-Create a new branch
+- Create a new branch
 
 ```
 git checkout -b feature/your-feature-name
 
 ```
-Make your changes
+- Make your changes
 
-Submit a pull request ✅
+- Submit a pull request ✅
 
 ---
 
