@@ -29,64 +29,59 @@ export default function CourseListPage() {
   const router = useRouter();
 
   useEffect(() => {
-    const fetchCoursesAndDashboard = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          setError("🔒 Please log in.");
-          setLoading(false);
-          return;
-        }
+  const fetchCoursesAndDashboard = async () => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setError("🔒 Please log in.");
+      setLoading(false);
+      return;
+    }
 
-        const [coursesRes, dashboardRes] = await Promise.all([
-          api.get("/courses"),
-          api.get("/dashboard"),
-        ]);
+    const [coursesRes, dashboardRes] = await Promise.all([
+      api.get("/courses"),
+      api.get("/dashboard"),
+    ]);
 
-        const courses = coursesRes?.courses || [];
-        const courseList: Course[] = coursesRes.data;
-        const dashboard = dashboardRes.data;
+    const courseList: Course[] = Array.isArray(coursesRes.data) ? coursesRes.data : [];
+    const dashboard = dashboardRes?.data || {};
+    const modules = Array.isArray(dashboard.courseModules) ? dashboard.courseModules : [];
 
-        console.log("📦 Courses fetched:", courseList);
-        console.log("📊 Dashboard data:", dashboard.courseModules);
+    console.log("📦 Courses fetched:", courseList);
+    console.log("📊 Dashboard data:", modules);
 
-        setCourses(courseList);
+    setCourses(courseList);
 
-        const completedIds = new Set<string>();
+    const completedIds = new Set<string>();
 
-        courseList.forEach((course) => {
-          const dashboardEntry = dashboard.courseModules.find(
-            (entry: DashboardEntry) => entry.courseId === course.id
-          );
+    courseList.forEach((course) => {
+      const dashboardEntry = modules.find(
+        (entry: DashboardEntry) => entry.courseId === course.id
+      );
 
-          if (!dashboardEntry) {
-            console.log(
-              `🚫 No dashboard entry found for course: ${course.title} (${course.id})`
-            );
-            return;
-          }
-
-          if (!dashboardEntry.isCompleted) {
-            console.log(
-              `🟡 Course not marked completed: ${course.title} (${course.id})`
-            );
-            return;
-          }
-
-          console.log(
-            `✅ Course marked completed: ${course.title} (${course.id})`
-          );
-          completedIds.add(course.id);
-        });
-
-        setCompletedCourseIds(completedIds);
-      } catch (err) {
-        console.error("❌ Error loading data:", err);
-        setError("⚠️ Failed to load courses.");
-      } finally {
-        setLoading(false);
+      if (!dashboardEntry) {
+        console.log(`🚫 No dashboard entry for: ${course.title} (${course.id})`);
+        return;
       }
-    };
+
+      if (!dashboardEntry.isCompleted) {
+        console.log(`🟡 Not completed: ${course.title} (${course.id})`);
+        return;
+      }
+
+      console.log(`✅ Completed: ${course.title} (${course.id})`);
+      completedIds.add(course.id);
+    });
+
+    setCompletedCourseIds(completedIds);
+  } catch (err) {
+    console.error("❌ Error loading data:", err);
+    setError("⚠️ Failed to load courses.");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
     fetchCoursesAndDashboard();
   }, []);
