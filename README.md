@@ -78,7 +78,7 @@ Visit https://vercel.com/import
 Import your GitHub repo and configure the settings
 
 Click Deploy and you're live!
-
+```
 ### 🎯 Features :
 
 🔐 Authentication (Login & Register)
@@ -97,12 +97,15 @@ Click Deploy and you're live!
 
 📱 Fully Responsive UI across devices
 
-
+```
 ### 📚 Documentation & References:
 
 Next.js Docs
+
 shadcn/ui
+
 Tailwind CSS
+
 TypeScript
 
 
