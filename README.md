@@ -81,7 +81,7 @@ Click Deploy and you're live!
 
 ## 🎯 Features :
 
-### 🔐 Authentication (Login & Register)
+##### 🔐 Authentication (Login & Register)
 
 ### 🧩 Modular Courses with dynamic routing
 
@@ -93,38 +93,38 @@ Click Deploy and you're live!
 
 ### 💬 Feedback and Profile Pages
 
-### 🌙 Dark/Light Theme Toggle
+#### 🌙 Dark/Light Theme Toggle
 
-### 📱 Fully Responsive UI across devices
+📱 Fully Responsive UI across devices
 
 
 ### 📚 Documentation & References:
 
-##### Next.js Docs
+Next.js Docs
 
-##### shadcn/ui
+shadcn/ui
 
-##### Tailwind CSS
+Tailwind CSS
 
-##### TypeScript
-
-
-## 🤝 Contributing
-### We welcome contributions, suggestions, and feedback!
-### If you’d like to contribute:
-
-### Fork this repo
-
-### Create a new branch (git checkout -b feature/your-feature-name)
-
-### Make your changes
-
-### Submit a pull request ✅
+TypeScript
 
 
-## 👨‍💻 Author
+🤝 Contributing
+We welcome contributions, suggestions, and feedback!
+If you’d like to contribute:
+
+Fork this repo
+
+Create a new branch (git checkout -b feature/your-feature-name)
+
+Make your changes
+
+Submit a pull request ✅
+
+
+### 👨‍💻 Author
 Developed with ❤️ by Surjeet Karan
 
 
-## 📄 License
+### 📄 License
 This project is licensed under the MIT License
