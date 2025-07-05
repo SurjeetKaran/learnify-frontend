@@ -67,90 +67,103 @@ export default function FlashcardDuelGame() {
     router.push(`/game?moduleId=${moduleId}`);
   };
 
- const handleSubmitResult = async () => {
-  const token = localStorage.getItem("token");
-  if (!token || !gameId || !moduleId) return;
-
-  setSubmitting(true);
-
-  const score = reviewed.filter((c) => c.isCorrect).length;
-  const total = cards.length;
-  const log = reviewed.map((card) => ({
-    question: card.front,
-    correct: card.back,
-    isCorrect: card.isCorrect,
-    selected: card.guess ? card.back : "(Wrong guess)",
-  }));
-
-  try {
-    // [1] Submit game result
-    await api.post(`/module/${moduleId}/game/${gameId}/submit`, { score, total, log });
-    console.log("✅ Game result submitted");
-
-    // [2] Fetch dashboard
-    const dashboard = await api.get("/dashboard");
-
-    const course = dashboard.courseModules.find((c: any) =>
-      c.completedModules.some((m: any) => m.moduleId === moduleId)
-    );
-    if (!course) throw new Error("Active course not found");
-
-    const module = course.completedModules.find(
-      (m: any) => m.moduleId === moduleId
-    );
-    if (!module) throw new Error("Module not found");
-
-    // [3] Save dashboard progress
-    const payload = {
-      courseId: course.courseId,
-      completedModule: {
-        moduleId,
-        title: module.title,
-      },
-      gameResult: {
-        gameId,
-        gameTitle: "Flashcard Duel",
-        score,
-        total,
-        timestamp: new Date().toISOString(),
-      },
-    };
-
-    await api.post("/dashboard/save", payload);
-    console.log("✅ Dashboard saved");
-
-    setSubmitted(true);
-  } catch (err) {
-    console.error("❌ Error submitting result:", err);
-  } finally {
-    setSubmitting(false);
-  }
-};
-
-
- useEffect(() => {
-  const fetchGame = async () => {
+  const handleSubmitResult = async () => {
     const token = localStorage.getItem("token");
-    if (!token || !moduleId || !gameId) {
-      setError("Missing token, module ID, or game ID.");
-      setLoading(false);
-      return;
-    }
+    if (!token || !gameId || !moduleId) return;
+
+    setSubmitting(true);
+
+    const score = reviewed.filter((c) => c.isCorrect).length;
+    const total = cards.length;
+    const log = reviewed.map((card) => ({
+      question: card.front,
+      correct: card.back,
+      isCorrect: card.isCorrect,
+      selected: card.guess ? card.back : "(Wrong guess)",
+    }));
 
     try {
-      const res = await api.get(`/module/${moduleId}/game/${gameId}`);
-      // process res as needed (e.g., setGame(res))
+      await api.post(`/module/${moduleId}/game/${gameId}/submit`, {
+        score,
+        total,
+        log,
+      });
+      console.log("✅ Game result submitted");
+
+      const dashboard = await api.get("/dashboard");
+
+      const course = dashboard.courseModules.find((c: any) =>
+        c.completedModules.some((m: any) => m.moduleId === moduleId)
+      );
+      if (!course) throw new Error("Active course not found");
+
+      const module = course.completedModules.find(
+        (m: any) => m.moduleId === moduleId
+      );
+      if (!module) throw new Error("Module not found");
+
+      const payload = {
+        courseId: course.courseId,
+        completedModule: {
+          moduleId,
+          title: module.title,
+        },
+        gameResult: {
+          gameId,
+          gameTitle,
+          score,
+          total,
+          timestamp: new Date().toISOString(),
+        },
+      };
+
+      await api.post("/dashboard/save", payload);
+      console.log("✅ Dashboard saved");
+      setSubmitted(true);
     } catch (err) {
-      console.error("❌ Failed to fetch game:", err);
-      setError("Failed to load game");
+      console.error("❌ Error submitting result:", err);
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   };
 
-  fetchGame();
-}, [moduleId, gameId]);
+  const setGame = (game: any) => {
+  setGameTitle(game.title || "Flashcard Duel");
+  setCards(game.items || []); // ✅ FIX: changed from game.cards to game.items
+};
 
+
+  useEffect(() => {
+    const fetchGame = async () => {
+      const token = localStorage.getItem("token");
+      if (!token || !moduleId || !gameId) {
+        setError("Missing token, module ID, or game ID.");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        console.log(`🎮 Fetching game: moduleId=${moduleId}, gameId=${gameId}`);
+        const res = await api.get<{ game: any }>(
+          `/module/${moduleId}/game/${gameId}`
+        );
+        console.log("📦 Game data response:", res);
+
+        if (!res || !res.game) {
+          throw new Error("Game data missing from response");
+        }
+
+        setGame(res.game);
+      } catch (err) {
+        console.error("❌ Failed to fetch game:", err);
+        setError("Failed to load game");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchGame();
+  }, [moduleId, gameId]);
 
   if (loading)
     return <div className="text-center mt-10">⏳ Loading Flashcards...</div>;
@@ -375,3 +388,7 @@ export default function FlashcardDuelGame() {
     </>
   );
 }
+function setGame(game: any) {
+  throw new Error("Function not implemented.");
+}
+

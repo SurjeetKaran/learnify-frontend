@@ -51,11 +51,15 @@ export default function ConceptMatchGame() {
       }
 
       try {
-        const res = await api.get(`/module/${moduleId}/game/${gameId}`);
-        const data = res.data;
+        console.log(`🎮 Fetching concept match game: ${moduleId} / ${gameId}`);
+        const res = await api.get<{ game: any }>(`/module/${moduleId}/game/${gameId}`);
 
-        setPairs(data.game?.items || []);
-        setGameTitle(data?.game?.title || "Concept Match");
+        if (!res || !res.game) {
+          throw new Error("Game data missing from response");
+        }
+
+        setPairs(res.game.items || []);
+        setGameTitle(res.game.title || "Concept Match");
       } catch (err: any) {
         console.error("❌ Failed to fetch concept match:", err);
         setError("Failed to load Concept Match.");
@@ -133,7 +137,7 @@ export default function ConceptMatchGame() {
         },
         gameResult: {
           gameId,
-          gameTitle: "Concept Match",
+          gameTitle,
           score,
           total: pairs.length,
           timestamp: new Date().toISOString(),
@@ -167,6 +171,7 @@ export default function ConceptMatchGame() {
     return (
       <div className="text-center mt-10">❌ No concept match pairs found.</div>
     );
+
 
   return (
     <div className="relative flex flex-col items-center justify-center min-h-[100dvh] px-4 py-6 space-y-6">

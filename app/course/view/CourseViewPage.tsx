@@ -39,14 +39,18 @@ export default function CourseViewPage() {
     }
 
     try {
-      // Fetch course
-      const courseRes = await api.get(`/courses/${courseId}`);
-      const { course } = courseRes.data;
+      // ✅ Fetch course
+      const courseData = await api.get(`/courses/${courseId}`);
+
+      if (!courseData?.course) {
+        throw new Error("Course data not found in response.");
+      }
+
+      const course = courseData.course;
       setCourse(course);
 
-      // Fetch dashboard
-      const dashRes = await api.get("/dashboard");
-      const dashboard = dashRes.data;
+      // ✅ Fetch dashboard
+      const dashboard = await api.get("/dashboard");
 
       const courseEntry = dashboard.courseModules.find(
         (c: any) => c.courseId === courseId
@@ -74,7 +78,7 @@ export default function CourseViewPage() {
         setCourseCompleted(false);
       }
 
-      // Debug logging
+      // 🐛 Debug logs
       console.log(
         "📘 Modules:",
         course?.modules.map((m: { id: any }) => m.id)

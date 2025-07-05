@@ -28,63 +28,70 @@ export default function CourseListPage() {
   const [error, setError] = useState("");
   const router = useRouter();
 
-  useEffect(() => {
+ useEffect(() => {
   const fetchCoursesAndDashboard = async () => {
-  try {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      setError("🔒 Please log in.");
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setError("🔒 Please log in.");
+        setLoading(false);
+        return;
+      }
+
+      const [coursesRes, dashboardRes] = await Promise.all([
+        api.get("/courses"),
+        api.get("/dashboard"),
+      ]);
+
+      const courseList: Course[] = Array.isArray(coursesRes)
+        ? coursesRes
+        : [];
+
+      const dashboard = dashboardRes || {};
+      const modules = Array.isArray(dashboard.courseModules)
+        ? dashboard.courseModules
+        : [];
+
+      console.log("📦 Courses fetched:", courseList);
+      console.log("📊 Dashboard data:", modules);
+
+      setCourses(courseList);
+
+      const completedIds = new Set<string>();
+
+      courseList.forEach((course) => {
+        const dashboardEntry = modules.find(
+          (entry: DashboardEntry) => entry.courseId === course.id
+        );
+
+        if (!dashboardEntry) {
+          console.log(
+            `🚫 No dashboard entry for: ${course.title} (${course.id})`
+          );
+          return;
+        }
+
+        if (!dashboardEntry.isCompleted) {
+          console.log(`🟡 Not completed: ${course.title} (${course.id})`);
+          return;
+        }
+
+        console.log(`✅ Completed: ${course.title} (${course.id})`);
+        completedIds.add(course.id);
+      });
+
+      setCompletedCourseIds(completedIds);
+    } catch (err) {
+      console.error("❌ Error loading data:", err);
+      setError("⚠️ Failed to load courses.");
+    } finally {
       setLoading(false);
-      return;
     }
+  };
 
-    const [coursesRes, dashboardRes] = await Promise.all([
-      api.get("/courses"),
-      api.get("/dashboard"),
-    ]);
+  fetchCoursesAndDashboard();
+}, []);
 
-    const courseList: Course[] = Array.isArray(coursesRes.data) ? coursesRes.data : [];
-    const dashboard = dashboardRes?.data || {};
-    const modules = Array.isArray(dashboard.courseModules) ? dashboard.courseModules : [];
-
-    console.log("📦 Courses fetched:", courseList);
-    console.log("📊 Dashboard data:", modules);
-
-    setCourses(courseList);
-
-    const completedIds = new Set<string>();
-
-    courseList.forEach((course) => {
-      const dashboardEntry = modules.find(
-        (entry: DashboardEntry) => entry.courseId === course.id
-      );
-
-      if (!dashboardEntry) {
-        console.log(`🚫 No dashboard entry for: ${course.title} (${course.id})`);
-        return;
-      }
-
-      if (!dashboardEntry.isCompleted) {
-        console.log(`🟡 Not completed: ${course.title} (${course.id})`);
-        return;
-      }
-
-      console.log(`✅ Completed: ${course.title} (${course.id})`);
-      completedIds.add(course.id);
-    });
-
-    setCompletedCourseIds(completedIds);
-  } catch (err) {
-    console.error("❌ Error loading data:", err);
-    setError("⚠️ Failed to load courses.");
-  } finally {
-    setLoading(false);
-  }
-};
-
-
-    fetchCoursesAndDashboard();
-  }, []);
 
   const handleCourseClick = async (course: Course) => {
     const token = localStorage.getItem("token");

@@ -49,8 +49,13 @@ export default function ReadingModulePage() {
 
         // Fetch dashboard for progress
         const dashboard = await api.get("/dashboard");
+        console.log("📊 Dashboard fetched:", dashboard);
 
-        const courseProgress = dashboard.courseModules?.find(
+        if (!dashboard?.courseModules) {
+          throw new Error("Dashboard courseModules missing.");
+        }
+
+        const courseProgress = dashboard.courseModules.find(
           (c: any) => c.courseId === moduleData.module.courseId
         );
 
