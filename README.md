@@ -133,7 +133,7 @@ Submit a pull request ✅
 Developed with ❤️ by Surjeet Karan
 GitHub Profile
 
-|------------------------------------------------------------------------------------------------------|
+--------------------------------------------------
 
 ### 📄 License
 This project is licensed under the MIT License
