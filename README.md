@@ -79,26 +79,26 @@ Import your GitHub repo and configure the settings
 
 Click Deploy and you're live!
 
-## 🎯 Features :
+### 🎯 Features :
 
-##### 🔐 Authentication (Login & Register)
+🔐 Authentication (Login & Register)
 
-### 🧩 Modular Courses with dynamic routing
+🧩 Modular Courses with dynamic routing
 
-### 🧠 AI-Powered Doubt Solving with conversational logic
+🧠 AI-Powered Doubt Solving with conversational logic
 
-### 🎮 Gamified Learning – Flashcards, Puzzles, Quizzes
+🎮 Gamified Learning – Flashcards, Puzzles, Quizzes
 
-### 📊 User Dashboard for progress tracking
+📊 User Dashboard for progress tracking
 
-### 💬 Feedback and Profile Pages
+💬 Feedback and Profile Pages
 
-#### 🌙 Dark/Light Theme Toggle
+🌙 Dark/Light Theme Toggle
 
 📱 Fully Responsive UI across devices
 
 
-### 📚 Documentation & References:
+#### 📚 Documentation & References:
 
 Next.js Docs
 
@@ -122,9 +122,9 @@ Make your changes
 Submit a pull request ✅
 
 
-### 👨‍💻 Author
+#### 👨‍💻 Author
 Developed with ❤️ by Surjeet Karan
 
 
-### 📄 License
+#### 📄 License
 This project is licensed under the MIT License
