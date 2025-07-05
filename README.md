@@ -22,7 +22,7 @@ Welcome to **Learnify**, an intelligent and modern e-learning frontend built wit
 | **Tailwind CSS** | Utility-first CSS framework for rapid UI development     |
 | **Vercel**     | Fast, zero-config deployment for frontend apps             |
 
----
+```
 
 ## 🗂 Folder Structure
 
@@ -39,7 +39,7 @@ ai-learning-platform/
 └── README.md # You're reading it!
 
 
----
+```
 
 ## 🚀 Getting Started
 
@@ -78,26 +78,21 @@ Visit https://vercel.com/import
 Import your GitHub repo and configure the settings
 
 Click Deploy and you're live!
-```
-🎯 Features :
 
-🔐 Authentication (Login & Register)
+## 🎯 Features
 
-🧩 Modular Courses with dynamic routing
+| Feature                            | Description                                                                 |
+|------------------------------------|-----------------------------------------------------------------------------|
+| 🔐 **Authentication**              | Secure login and registration flow using modern practices                   |
+| 🧩 **Modular Courses**             | Course content organized with dynamic Next.js routing                       |
+| 🧠 **AI-Powered Doubt Solving**    | Intelligent chatbot assistance for solving user queries                     |
+| 🎮 **Gamified Learning**           | Interactive games like flashcards, quizzes, puzzles, and story modes        |
+| 📊 **User Dashboard**              | Tracks learning progress and activity statistics                            |
+| 💬 **Feedback & Profile Pages**    | User feedback and profile customization                                    |
+| 🌙 **Dark/Light Mode Toggle**      | Seamless theme switching with persistent settings                          |
+| 📱 **Responsive Design**           | Optimized UI for desktops, tablets, and mobile devices                     |
 
-🧠 AI-Powered Doubt Solving with conversational logic
 
-🎮 Gamified Learning – Flashcards, Puzzles, Quizzes
-
-📊 User Dashboard for progress tracking
-
-💬 Feedback and Profile Pages
-
-🌙 Dark/Light Theme Toggle
-
-📱 Fully Responsive UI across devices
-
-```
 ### 📚 Documentation & References:
 
 Next.js Docs
@@ -109,23 +104,25 @@ Tailwind CSS
 TypeScript
 
 
-🤝 Contributing
+### 🤝 Contributing
 We welcome contributions, suggestions, and feedback!
 If you’d like to contribute:
 
 Fork this repo
 
-Create a new branch (git checkout -b feature/your-feature-name)
+Create a new branch
 
+```
+git checkout -b feature/your-feature-name
+
+```
 Make your changes
 
 Submit a pull request ✅
 
-```
-👨‍💻 Author
+### 👨‍💻 Author
 Developed with ❤️ by Surjeet Karan
-```
-```
-📄 License
+GitHub Profile
+
+### 📄 License
 This project is licensed under the MIT License
-```
