@@ -79,51 +79,52 @@ Import your GitHub repo and configure the settings
 
 Click Deploy and you're live!
 
+## 🎯 Features :
 
-🎯 Features :
+### 🔐 Authentication (Login & Register)
 
-🔐 Authentication (Login & Register)
+### 🧩 Modular Courses with dynamic routing
 
-🧩 Modular Courses with dynamic routing
+### 🧠 AI-Powered Doubt Solving with conversational logic
 
-🧠 AI-Powered Doubt Solving with conversational logic
+### 🎮 Gamified Learning – Flashcards, Puzzles, Quizzes
 
-🎮 Gamified Learning – Flashcards, Puzzles, Quizzes
+### 📊 User Dashboard for progress tracking
 
-📊 User Dashboard for progress tracking
+### 💬 Feedback and Profile Pages
 
-💬 Feedback and Profile Pages
+### 🌙 Dark/Light Theme Toggle
 
-🌙 Dark/Light Theme Toggle
-
-📱 Fully Responsive UI across devices
-
-
-📚 Documentation & References:
-
-Next.js Docs
-
-shadcn/ui
-
-Tailwind CSS
-
-TypeScript
+### 📱 Fully Responsive UI across devices
 
 
-🤝 Contributing
-We welcome contributions, suggestions, and feedback!
-If you’d like to contribute:
+### 📚 Documentation & References:
 
-Fork this repo
+##### Next.js Docs
 
-Create a new branch (git checkout -b feature/your-feature-name)
+##### shadcn/ui
 
-Make your changes
+##### Tailwind CSS
 
-Submit a pull request ✅
+##### TypeScript
 
-👨‍💻 Author
+
+## 🤝 Contributing
+### We welcome contributions, suggestions, and feedback!
+### If you’d like to contribute:
+
+### Fork this repo
+
+### Create a new branch (git checkout -b feature/your-feature-name)
+
+### Make your changes
+
+### Submit a pull request ✅
+
+
+## 👨‍💻 Author
 Developed with ❤️ by Surjeet Karan
 
-📄 License
+
+## 📄 License
 This project is licensed under the MIT License
