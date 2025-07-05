@@ -76,7 +76,7 @@ npm run dev
 | `npm run dev`   | Start the local dev server  |
 | `npm run build` | Build for production        |
 | `npm run start` | Run the production app      |
-| `npm run lint`  | Run ESLint for code quality |
+
 
 ---
 
@@ -137,7 +137,5 @@ Developed with ❤️ by **Surjeet Karan**
 
 ## 📄 License
 
-This project is licensed under the **MIT License**.
-
-```
+This project is licensed under the **MIT License**
 
