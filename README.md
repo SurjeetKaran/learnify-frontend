@@ -107,6 +107,7 @@ Click Deploy and you're live!
 - 🔷 **[TypeScript Docs](https://www.typescriptlang.org/docs/)**  
   Understand static typing in JavaScript
 
+---
 
 ### 🤝 Contributing
 We welcome contributions, suggestions, and feedback!
@@ -125,6 +126,7 @@ Make your changes
 Submit a pull request ✅
 
 ---
+
 ### 👨‍💻 Author
 Developed with ❤️ by Surjeet Karan
 GitHub Profile
