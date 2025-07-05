@@ -72,13 +72,13 @@ Then open your browser and visit: http://localhost:3000
 
 ```
 🌍 Deployment (Vercel Recommended)
-Push your code to a GitHub repository
+- Push your code to a GitHub repository
 
-Visit https://vercel.com/import
+- Visit https://vercel.com/import
 
-Import your GitHub repo and configure the settings
+- Import your GitHub repo and configure the settings
 
-Click Deploy and you're live!
+- Click Deploy and you're live!
 
 ## 🎯 Features
 
