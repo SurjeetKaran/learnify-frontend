@@ -131,7 +131,6 @@ git checkout -b feature/your-feature-name
 
 ### 👨‍💻 Author
 Developed with ❤️ by Surjeet Karan
-GitHub Profile
 
 --------------------------------------------------
 
