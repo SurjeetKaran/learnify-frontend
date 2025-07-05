@@ -43,6 +43,7 @@ export default function CourseListPage() {
           api.get("/dashboard"),
         ]);
 
+        const courses = coursesRes?.courses || [];
         const courseList: Course[] = coursesRes.data;
         const dashboard = dashboardRes.data;
 
