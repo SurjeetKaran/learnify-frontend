@@ -94,13 +94,18 @@ Click Deploy and you're live!
 
 
 ### 📚 Documentation & References
-📘 Next.js Documentation – Learn about features, routing, and deployment
 
-🧩 shadcn/ui Docs – Explore accessible, customizable UI components
+- 📘 **[Next.js Documentation](https://nextjs.org/docs)**  
+  Learn about features, routing, and deployment
 
-🎨 Tailwind CSS Docs – Master utility-first styling
+- 🧩 **[shadcn/ui Docs](https://ui.shadcn.com/docs)**  
+  Explore accessible, customizable UI components
 
-🔷 TypeScript Docs – Understand static typing in JavaScript
+- 🎨 **[Tailwind CSS Docs](https://tailwindcss.com/docs)**  
+  Master utility-first styling
+
+- 🔷 **[TypeScript Docs](https://www.typescriptlang.org/docs/)**  
+  Understand static typing in JavaScript
 
 
 ### 🤝 Contributing
@@ -123,6 +128,8 @@ Submit a pull request ✅
 ### 👨‍💻 Author
 Developed with ❤️ by Surjeet Karan
 GitHub Profile
+
 ---
+
 ### 📄 License
 This project is licensed under the MIT License
