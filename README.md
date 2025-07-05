@@ -1,73 +1,72 @@
-Learnify – AI-Powered Learning Platform (Frontend)
+# Learnify – AI Learning Platform (Frontend)
 
-Learnify is a modern AI-powered learning platform designed to make education more engaging, interactive, and personalized. This is the frontend application built using cutting-edge web technologies and best practices.
+This is the frontend of **Learnify**, an AI-powered learning platform built with [Next.js](https://nextjs.org), [TypeScript](https://www.typescriptlang.org/), and [shadcn/ui](https://ui.shadcn.com/). It follows the new `app/` directory structure introduced in Next.js 13+ and is styled with Tailwind CSS.
 
-Tech Stack
-- Next.js 13+ – App Router, SSR, and optimized routing
-- TypeScript – Strong typing for better development experience
-- shadcn/ui – Accessible and customizable components built on Radix UI
-- Tailwind CSS – Utility-first CSS framework
-- Vercel – Zero-config deployment and CDN optimization
+---
 
-Folder Structure
-ai-learning-platform/
-├── app/              # Route handlers and pages (auth, course, dashboard, etc.)
-├── components/       # Reusable UI components
-├── context/          # Global state/context providers
-├── lib/              # Utility functions and API services
-├── public/           # Static assets
-├── styles/           # Tailwind & global styles
-├── .gitignore
-├── .gitattributes
-├── README.md
-├── package.json
-├── tsconfig.json
+## 🚀 Getting Started
 
-Getting Started
-Prerequisites
-- Node.js 18+
-- npm or yarn
+To run the development server locally:
 
-Development Setup
 npm install
 npm run dev
+Then open http://localhost:3000 in your browser.
 
-Then open http://localhost:3000 in your browser to see the result.
+You can start editing the homepage by modifying:
+app/page.tsx
+The app auto-refreshes as you edit files.
 
-Available Scripts
+🧠 Tech Stack
+
+⚛️ Next.js 13+ – App directory-based routing and layouts
+🎨 shadcn/ui – UI components built on Radix and Tailwind CSS
+🟦 TypeScript – Static type checking
+🌐 Vercel – Optimized deployment and hosting
+📁 Modular Folder Structure – Organized under app/, components/, lib/, etc.
+
+📦 Scripts
+
 npm run dev       # Start development server
-npm run build     # Build production-ready app
-npm run start     # Run production server
-npm run lint      # Run linter checks
+npm run build     # Build for production
+npm run start     # Start production server
 
-Deployment
+
+📂 Folder Structure Overview
+
+ai-learning-platform/
+├── app/              # Routes and pages (auth, course, dashboard, etc.)
+├── components/       # Reusable UI components
+├── context/          # React context providers
+├── lib/              # Utility functions and helpers
+├── public/           # Static assets
+├── styles/           # Global CSS (e.g., globals.css)
+├── .next/            # Next.js build output (ignored)
+├── .gitignore
+├── package.json
+├── tsconfig.json
+🌍 Deployment
+
 Deploy on Vercel (Recommended)
-1. Push your code to a GitHub repository
-2. Go to https://vercel.com/import
-3. Select your repository
-4. Click Deploy
+Push your code to GitHub
 
-Features
-- Authentication (Login/Register)
-- Course Modules with dynamic routing
-- AI-Powered Doubt Solving
-- Gamified Learning (Flashcards, Quizzes, Puzzle Games)
-- Feedback, Profile & Dashboard pages
-- Dark/Light mode toggle
-- Responsive UI across devices
+Visit https://vercel.com/import
 
-Documentation
-- Next.js Docs – https://nextjs.org/docs
-- shadcn/ui Docs – https://ui.shadcn.com
-- Tailwind CSS Docs – https://tailwindcss.com/docs
-- TypeScript Docs – https://www.typescriptlang.org/docs/
+Select your GitHub repo and follow the prompts
 
-Contributing
-Contributions are welcome! Feel free to submit issues or pull requests.
+Vercel will auto-detect Next.js and deploy at:
 
-Author
-Surjeet Karan – https://github.com/SurjeetKaran
+https://your-project-name.vercel.app
 
-License
-This project is licensed under the MIT License – https://opensource.org/licenses/MIT
-"""
+📚 Learn More
+Next.js Docs
+
+Learn Next.js (Interactive)
+
+shadcn/ui Docs
+
+Tailwind CSS Docs
+
+🛠️ Author & License
+Built with ❤️ by Surjeet Karan.
+Licensed under MIT.
+
