@@ -8,7 +8,7 @@ Welcome to **Learnify**, an intelligent and modern e-learning frontend built wit
 
 ## 🔗 Live Demo
 
-👉 [Visit Learnify Frontend](https://your-vercel-deployment.vercel.app)
+👉 [Visit Learnify Frontend](https://learnify-frontend-surjeet-karans-projects.vercel.app/)
 
 ---
 
