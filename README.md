@@ -23,6 +23,7 @@ Welcome to **Learnify**, an intelligent and modern e-learning frontend built wit
 | **Vercel**     | Fast, zero-config deployment for frontend apps             |
 
 ```
+--- 
 
 ## 🗂 Folder Structure
 
@@ -131,7 +132,7 @@ Submit a pull request ✅
 Developed with ❤️ by Surjeet Karan
 GitHub Profile
 
----
+------------------------------------------------------------------------------------------------------
 
 ### 📄 License
 This project is licensed under the MIT License
