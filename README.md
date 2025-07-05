@@ -93,15 +93,14 @@ Click Deploy and you're live!
 | 📱 **Responsive Design**           | Optimized UI for desktops, tablets, and mobile devices                     |
 
 
-### 📚 Documentation & References:
+### 📚 Documentation & References
+📘 Next.js Documentation – Learn about features, routing, and deployment
 
-Next.js Docs
+🧩 shadcn/ui Docs – Explore accessible, customizable UI components
 
-shadcn/ui
+🎨 Tailwind CSS Docs – Master utility-first styling
 
-Tailwind CSS
-
-TypeScript
+🔷 TypeScript Docs – Understand static typing in JavaScript
 
 
 ### 🤝 Contributing
@@ -120,9 +119,10 @@ Make your changes
 
 Submit a pull request ✅
 
+---
 ### 👨‍💻 Author
 Developed with ❤️ by Surjeet Karan
 GitHub Profile
-
+---
 ### 📄 License
 This project is licensed under the MIT License
