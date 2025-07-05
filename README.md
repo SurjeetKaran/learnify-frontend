@@ -93,6 +93,7 @@ Click Deploy and you're live!
 | 🌙 **Dark/Light Mode Toggle**      | Seamless theme switching with persistent settings                          |
 | 📱 **Responsive Design**           | Optimized UI for desktops, tablets, and mobile devices                     |
 
+---
 
 ### 📚 Documentation & References
 
@@ -132,7 +133,7 @@ Submit a pull request ✅
 Developed with ❤️ by Surjeet Karan
 GitHub Profile
 
-------------------------------------------------------------------------------------------------------
+|------------------------------------------------------------------------------------------------------|
 
 ### 📄 License
 This project is licensed under the MIT License
