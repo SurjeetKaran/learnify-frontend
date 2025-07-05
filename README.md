@@ -68,6 +68,8 @@ Then open your browser and visit: http://localhost:3000
 | `npm run start` | Run the production-ready app       |
 | `npm run lint`  | Lint your code using ESLint        |
 
+
+```
 🌍 Deployment (Vercel Recommended)
 Push your code to a GitHub repository
 
@@ -76,6 +78,7 @@ Visit https://vercel.com/import
 Import your GitHub repo and configure the settings
 
 Click Deploy and you're live!
+
 
 🎯 Features :
 
@@ -95,6 +98,7 @@ Click Deploy and you're live!
 
 📱 Fully Responsive UI across devices
 
+
 📚 Documentation & References:
 
 Next.js Docs
@@ -104,6 +108,7 @@ shadcn/ui
 Tailwind CSS
 
 TypeScript
+
 
 🤝 Contributing
 We welcome contributions, suggestions, and feedback!
