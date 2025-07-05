@@ -98,14 +98,11 @@ Click Deploy and you're live!
 📱 Fully Responsive UI across devices
 
 
-#### 📚 Documentation & References:
+### 📚 Documentation & References:
 
 Next.js Docs
-
 shadcn/ui
-
 Tailwind CSS
-
 TypeScript
 
 
