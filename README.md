@@ -79,7 +79,7 @@ Import your GitHub repo and configure the settings
 
 Click Deploy and you're live!
 ```
-### 🎯 Features :
+🎯 Features :
 
 🔐 Authentication (Login & Register)
 
@@ -121,10 +121,11 @@ Make your changes
 
 Submit a pull request ✅
 
-
-#### 👨‍💻 Author
+```
+👨‍💻 Author
 Developed with ❤️ by Surjeet Karan
-
-
-#### 📄 License
+```
+```
+📄 License
 This project is licensed under the MIT License
+```
