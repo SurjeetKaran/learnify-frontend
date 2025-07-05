@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Learnify – AI Learning Platform (Frontend)
 
-## Getting Started
+This is the frontend of **Learnify**, an AI-powered learning platform built with [Next.js](https://nextjs.org), [TypeScript](https://www.typescriptlang.org/), and [shadcn/ui](https://ui.shadcn.com/). It follows the new `app/` directory structure introduced in Next.js 13+ and is styled with Tailwind CSS.
 
-First, run the development server:
+---
 
-```bash
+## 🚀 Getting Started
+
+To run the development server locally:
+
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Then open http://localhost:3000 in your browser.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+You can start editing the homepage by modifying:
+app/page.tsx
+The app auto-refreshes as you edit files.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+🧠 Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+⚛️ Next.js 13+ – App directory-based routing and layouts
+🎨 shadcn/ui – UI components built on Radix and Tailwind CSS
+🟦 TypeScript – Static type checking
+🌐 Vercel – Optimized deployment and hosting
+📁 Modular Folder Structure – Organized under app/, components/, lib/, etc.
 
-## Learn More
+📦 Scripts
 
-To learn more about Next.js, take a look at the following resources:
+npm run dev       # Start development server
+npm run build     # Build for production
+npm run start     # Start production server
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+📂 Folder Structure Overview
 
-## Deploy on Vercel
+ai-learning-platform/
+├── app/              # Routes and pages (auth, course, dashboard, etc.)
+├── components/       # Reusable UI components
+├── context/          # React context providers
+├── lib/              # Utility functions and helpers
+├── public/           # Static assets
+├── styles/           # Global CSS (e.g., globals.css)
+├── .next/            # Next.js build output (ignored)
+├── .gitignore
+├── package.json
+├── tsconfig.json
+🌍 Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Deploy on Vercel (Recommended)
+Push your code to GitHub
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Visit https://vercel.com/import
+
+Select your GitHub repo and follow the prompts
+
+Vercel will auto-detect Next.js and deploy at:
+
+https://your-project-name.vercel.app
+
+📚 Learn More
+Next.js Docs
+
+Learn Next.js (Interactive)
+
+shadcn/ui Docs
+
+Tailwind CSS Docs
+
+🛠️ Author & License
+Built with ❤️ by Surjeet Karan.
+Licensed under MIT.
+
