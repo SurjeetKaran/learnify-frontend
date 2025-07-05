@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import api from "@/lib/api";
 
 interface Doubt {
   _id: string;
@@ -10,7 +10,6 @@ interface Doubt {
   createdAt: string;
 }
 
-const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
 export default function DoubtHistoryPage() {
   const [doubts, setDoubts] = useState<Doubt[]>([]);
@@ -18,28 +17,17 @@ export default function DoubtHistoryPage() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchDoubts = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) throw new Error("Missing token");
-
-        const res = await fetch(`${baseUrl}/api/doubts`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (!res.ok) throw new Error("Failed to fetch doubts");
-
-        const data = await res.json();
-        setDoubts(data?.doubts || []);
-      } catch (err: any) {
-        console.error("❌ Error fetching doubts:", err.message);
-        setError("Failed to load doubts. Please try again.");
-      } finally {
-        setLoading(false);
-      }
-    };
+   const fetchDoubts = async () => {
+  try {
+    const data = await api.get("/doubts");
+    setDoubts(data?.doubts || []);
+  } catch (err: any) {
+    console.error("❌ Error fetching doubts:", err.message);
+    setError("Failed to load doubts. Please try again.");
+  } finally {
+    setLoading(false);
+  }
+};
 
     fetchDoubts();
   }, []);

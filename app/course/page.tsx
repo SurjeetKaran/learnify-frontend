@@ -1,12 +1,10 @@
-
-
-
 "use client";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { HelpCircle, Sparkles } from "lucide-react";
+import api from "@/lib/api";
 
 type Course = {
   id: string;
@@ -23,7 +21,9 @@ type DashboardEntry = {
 
 export default function CourseListPage() {
   const [courses, setCourses] = useState<Course[]>([]);
-  const [completedCourseIds, setCompletedCourseIds] = useState<Set<string>>(new Set());
+  const [completedCourseIds, setCompletedCourseIds] = useState<Set<string>>(
+    new Set()
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const router = useRouter();
@@ -39,18 +39,12 @@ export default function CourseListPage() {
         }
 
         const [coursesRes, dashboardRes] = await Promise.all([
-          fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000"}/api/courses`, {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-          fetch("http://localhost:5000/api/dashboard", {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
+          api.get("/courses"),
+          api.get("/dashboard"),
         ]);
 
-        if (!coursesRes.ok || !dashboardRes.ok) throw new Error("Failed to fetch data");
-
-        const courseList: Course[] = await coursesRes.json();
-        const dashboard = await dashboardRes.json();
+        const courseList: Course[] = coursesRes.data;
+        const dashboard = dashboardRes.data;
 
         console.log("📦 Courses fetched:", courseList);
         console.log("📊 Dashboard data:", dashboard.courseModules);
@@ -65,16 +59,22 @@ export default function CourseListPage() {
           );
 
           if (!dashboardEntry) {
-            console.log(`🚫 No dashboard entry found for course: ${course.title} (${course.id})`);
+            console.log(
+              `🚫 No dashboard entry found for course: ${course.title} (${course.id})`
+            );
             return;
           }
 
           if (!dashboardEntry.isCompleted) {
-            console.log(`🟡 Course not marked completed: ${course.title} (${course.id})`);
+            console.log(
+              `🟡 Course not marked completed: ${course.title} (${course.id})`
+            );
             return;
           }
 
-          console.log(`✅ Course marked completed: ${course.title} (${course.id})`);
+          console.log(
+            `✅ Course marked completed: ${course.title} (${course.id})`
+          );
           completedIds.add(course.id);
         });
 
@@ -95,18 +95,11 @@ export default function CourseListPage() {
     if (!token) return;
 
     try {
-      await fetch("http://localhost:5000/api/dashboard/save", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+      await api.post("/dashboard/save", {
+        activeCourse: {
+          courseId: course.id,
+          title: course.title || "",
         },
-        body: JSON.stringify({
-          activeCourse: {
-            courseId: course.id,
-            title: course.title || "",
-          },
-        }),
       });
 
       router.push(`/course/view?id=${course.id}`);
@@ -189,7 +182,10 @@ export default function CourseListPage() {
 
       {/* Floating Buttons */}
       <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3">
-        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
           <button
             onClick={() => router.push("/doubt")}
             className="p-3 rounded-full bg-gradient-to-br from-pink-500 to-violet-600 text-white shadow-lg hover:scale-105 transition"

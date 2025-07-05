@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { saveDashboardProgress } from "@/lib/dashboard";
+import api from "@/lib/api";
 
 type Question = {
   question: string;
@@ -56,19 +57,7 @@ export default function QuickQuizGame() {
       }
 
       try {
-        const res = await fetch(
-          `http://localhost:5000/api/module/${moduleId}/game/${gameId}`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (!res.ok) throw new Error(await res.text());
-
-        const data = await res.json();
+        const data = await api.get(`/module/${moduleId}/game/${gameId}`);
         setQuestions(data.game?.items || []);
         setGameTitle(data?.game?.title || "Quick Quiz");
       } catch (err) {
@@ -135,56 +124,24 @@ export default function QuickQuizGame() {
       };
 
       console.log("📤 [1] Submitting quiz result:", quizPayload);
-
-      const res = await fetch(
-        `http://localhost:5000/api/module/${moduleId}/game/${gameId}/submit`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(quizPayload),
-        }
-      );
-
-      if (!res.ok) {
-        const errText = await res.text();
-        console.error("❌ [1] Quiz result submission failed:", errText);
-        throw new Error(errText);
-      }
-
+      await api.post(`/module/${moduleId}/game/${gameId}/submit`, quizPayload);
       console.log("✅ [1] Quiz result submitted");
 
-      // [2] Fetch user dashboard
-      const dashRes = await fetch(`http://localhost:5000/api/dashboard`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      // [2] Fetch dashboard
+      const dashboard = await api.get("/dashboard");
 
-      if (!dashRes.ok) {
-        const errText = await dashRes.text();
-        console.error("❌ [2] Dashboard fetch failed:", errText);
-        throw new Error("Failed to fetch dashboard");
-      }
-
-      const dashboard = await dashRes.json();
-
-      // [3] Identify course containing the current module
+      // [3] Find course & module
       const course = dashboard.courseModules.find((c: any) =>
         c.completedModules.some((m: any) => m.moduleId === moduleId)
       );
-
-      if (!course) {
-        throw new Error("❌ Active course not found for module");
-      }
+      if (!course) throw new Error("❌ Active course not found for module");
 
       const module = course.completedModules.find(
         (m: any) => m.moduleId === moduleId
       );
-      if (!module) {
-        throw new Error("❌ Module not found in course");
-      }
+      if (!module) throw new Error("❌ Module not found in course");
 
+      // [4] Save dashboard progress
       const dashboardPayload = {
         courseId: course.courseId,
         completedModule: {
@@ -201,7 +158,6 @@ export default function QuickQuizGame() {
       };
 
       console.log("📤 [4] Submitting dashboard progress:", dashboardPayload);
-
       await saveDashboardProgress(dashboardPayload);
 
       console.log("✅ [4] Dashboard updated");
@@ -397,4 +353,3 @@ export default function QuickQuizGame() {
     </>
   );
 }
-

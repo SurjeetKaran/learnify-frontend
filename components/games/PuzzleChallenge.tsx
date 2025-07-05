@@ -11,6 +11,7 @@ import {
 import { useParams, useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { saveDashboardProgress } from "@/lib/dashboard";
+import api from "@/lib/api";
 
 type Puzzle = {
   question: string;
@@ -49,20 +50,9 @@ export default function PuzzleChallengeGame() {
       }
 
       try {
-        const res = await fetch(
-          `http://localhost:5000/api/module/${moduleId}/game/${gameId}`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (!res.ok) throw new Error(await res.text());
-        const data = await res.json();
+        const data = await api.get(`/module/${moduleId}/game/${gameId}`);
         setPuzzles(data.game?.items || []);
-        setGameTitle(data?.game?.title || "Puzzle Challenge");
+        setGameTitle(data.game?.title || "Puzzle Challenge");
       } catch (err) {
         console.error("❌ Failed to fetch puzzle game:", err);
         setError("Failed to load Puzzle Challenge.");
@@ -117,31 +107,17 @@ export default function PuzzleChallengeGame() {
     }
 
     try {
-      const res = await fetch(
-        `http://localhost:5000/api/module/${moduleId}/game/${gameId}/submit`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            score,
-            total: puzzles.length,
-            log: answersLog,
-          }),
-        }
-      );
-
-      if (!res.ok) throw new Error(await res.text());
-
-      const resDashboard = await fetch(`http://localhost:5000/api/dashboard`, {
-        headers: { Authorization: `Bearer ${token}` },
+      // [1] Submit game result
+      await api.post(`/module/${moduleId}/game/${gameId}/submit`, {
+        score,
+        total: puzzles.length,
+        log: answersLog,
       });
+      console.log("✅ Game result submitted");
 
-      if (!resDashboard.ok) throw new Error(await resDashboard.text());
+      // [2] Fetch dashboard
+      const dashboard = await api.get("/dashboard");
 
-      const dashboard = await resDashboard.json();
       const course = dashboard.courseModules.find((c: any) =>
         c.completedModules.some((m: any) => m.moduleId === moduleId)
       );
@@ -152,6 +128,7 @@ export default function PuzzleChallengeGame() {
       );
       if (!module) throw new Error("❌ Module not found in course");
 
+      // [3] Save dashboard progress
       await saveDashboardProgress({
         courseId: course.courseId,
         completedModule: { moduleId, title: module.title },
@@ -349,7 +326,7 @@ export default function PuzzleChallengeGame() {
       </AnimatePresence>
 
       {/* 💬 Floating Action Buttons */}
-       <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3">
+      <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}

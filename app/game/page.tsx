@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { JSX } from "react/jsx-runtime";
+import api from "@/lib/api";
 
 interface Game {
   _id: string;
@@ -47,21 +48,12 @@ export default function GamePage() {
 
   const moduleId = searchParams.get("moduleId");
 
-  // Fetch submitted game results and courseId from dashboard
   useEffect(() => {
     const fetchSubmittedGameResults = async () => {
-      const token = localStorage.getItem("token");
-      if (!token || !moduleId) return;
+      if (!moduleId) return;
 
       try {
-        const res = await fetch("http://localhost:5000/api/dashboard", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (!res.ok) throw new Error(await res.text());
-        const dashboard = await res.json();
+        const dashboard = await api.get("/dashboard");
 
         const resultMap = new Map<string, { score: number; total: number }>();
         let foundCourseId: string | null = null;
@@ -83,8 +75,10 @@ export default function GamePage() {
         setCompleted(resultMap);
         setFetchedCourseId(foundCourseId);
 
-        // Debug logs - remove if you want
-        console.log("Completed game results keys:", Array.from(resultMap.keys()));
+        console.log(
+          "Completed game results keys:",
+          Array.from(resultMap.keys())
+        );
         console.log("Fetched courseId:", foundCourseId);
       } catch (err) {
         console.error("❌ Error fetching dashboard results:", err);
@@ -94,29 +88,16 @@ export default function GamePage() {
     fetchSubmittedGameResults();
   }, [moduleId]);
 
-  // Fetch games from backend
   useEffect(() => {
     const fetchGames = async () => {
-      const token = localStorage.getItem("token");
-      if (!token || !moduleId) {
-        setError("Missing token or module ID.");
+      if (!moduleId) {
+        setError("Missing module ID.");
         setLoading(false);
         return;
       }
 
       try {
-        const res = await fetch(
-          `http://localhost:5000/api/module/${moduleId}/games`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (!res.ok) throw new Error(await res.text());
-        const data = await res.json();
+        const data = await api.get(`/module/${moduleId}/games`);
         setGames(data.games || []);
       } catch (err) {
         console.error("❌ Error fetching games:", err);
@@ -144,13 +125,7 @@ export default function GamePage() {
 
   // Check if all games are completed (disabled)
   const allGamesCompleted =
-    games.length > 0 &&
-    games.every((game) => completed.has(String(game._id)));
-
-  // Debug logs
-  // console.log("All games completed:", allGamesCompleted);
-  // console.log("ModuleId:", moduleId);
-  // console.log("Fetched courseId:", fetchedCourseId);
+    games.length > 0 && games.every((game) => completed.has(String(game._id)));
 
   return (
     <div className="relative min-h-[100dvh] px-4 py-10">
@@ -169,9 +144,7 @@ export default function GamePage() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-6">
             {games.map((game) => {
-              const icon = gameIcons[game.gameType] || (
-                <Gamepad2 size={24} />
-              );
+              const icon = gameIcons[game.gameType] || <Gamepad2 size={24} />;
               const result = completed.get(game._id);
               const isDone = !!result;
 
@@ -270,7 +243,3 @@ export default function GamePage() {
     </div>
   );
 }
-
-
-
-

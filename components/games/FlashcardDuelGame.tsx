@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import api from "@/lib/api";
 
 export default function FlashcardDuelGame() {
   const { moduleId, gameId } = useParams() as {
@@ -66,116 +67,90 @@ export default function FlashcardDuelGame() {
     router.push(`/game?moduleId=${moduleId}`);
   };
 
-  const handleSubmitResult = async () => {
+ const handleSubmitResult = async () => {
+  const token = localStorage.getItem("token");
+  if (!token || !gameId || !moduleId) return;
+
+  setSubmitting(true);
+
+  const score = reviewed.filter((c) => c.isCorrect).length;
+  const total = cards.length;
+  const log = reviewed.map((card) => ({
+    question: card.front,
+    correct: card.back,
+    isCorrect: card.isCorrect,
+    selected: card.guess ? card.back : "(Wrong guess)",
+  }));
+
+  try {
+    // [1] Submit game result
+    await api.post(`/module/${moduleId}/game/${gameId}/submit`, { score, total, log });
+    console.log("✅ Game result submitted");
+
+    // [2] Fetch dashboard
+    const dashboard = await api.get("/dashboard");
+
+    const course = dashboard.courseModules.find((c: any) =>
+      c.completedModules.some((m: any) => m.moduleId === moduleId)
+    );
+    if (!course) throw new Error("Active course not found");
+
+    const module = course.completedModules.find(
+      (m: any) => m.moduleId === moduleId
+    );
+    if (!module) throw new Error("Module not found");
+
+    // [3] Save dashboard progress
+    const payload = {
+      courseId: course.courseId,
+      completedModule: {
+        moduleId,
+        title: module.title,
+      },
+      gameResult: {
+        gameId,
+        gameTitle: "Flashcard Duel",
+        score,
+        total,
+        timestamp: new Date().toISOString(),
+      },
+    };
+
+    await api.post("/dashboard/save", payload);
+    console.log("✅ Dashboard saved");
+
+    setSubmitted(true);
+  } catch (err) {
+    console.error("❌ Error submitting result:", err);
+  } finally {
+    setSubmitting(false);
+  }
+};
+
+
+ useEffect(() => {
+  const fetchGame = async () => {
     const token = localStorage.getItem("token");
-    if (!token || !gameId || !moduleId) return;
-
-    setSubmitting(true);
-
-    const score = reviewed.filter((c) => c.isCorrect).length;
-    const total = cards.length;
-    const log = reviewed.map((card) => ({
-      question: card.front,
-      correct: card.back,
-      isCorrect: card.isCorrect,
-      selected: card.guess ? card.back : "(Wrong guess)",
-    }));
+    if (!token || !moduleId || !gameId) {
+      setError("Missing token, module ID, or game ID.");
+      setLoading(false);
+      return;
+    }
 
     try {
-      const res = await fetch(
-        `http://localhost:5000/api/module/${moduleId}/game/${gameId}/submit`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ score, total, log }),
-        }
-      );
-
-      if (!res.ok) throw new Error("Failed to submit result");
-
-      const dashRes = await fetch(`http://localhost:5000/api/dashboard`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (!dashRes.ok) throw new Error("Dashboard fetch failed");
-
-      const dashboard = await dashRes.json();
-      const course = dashboard.courseModules.find((c: any) =>
-        c.completedModules.some((m: any) => m.moduleId === moduleId)
-      );
-      const module = course.completedModules.find(
-        (m: any) => m.moduleId === moduleId
-      );
-
-      const payload = {
-        courseId: course.courseId,
-        completedModule: {
-          moduleId,
-          title: module.title,
-        },
-        gameResult: {
-          gameId,
-          gameTitle: "Flashcard Duel",
-          score,
-          total,
-          timestamp: new Date().toISOString(),
-        },
-      };
-
-      await fetch(`http://localhost:5000/api/dashboard/save`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(payload),
-      });
-
-      setSubmitted(true);
+      const res = await api.get(`/module/${moduleId}/game/${gameId}`);
+      // process res as needed (e.g., setGame(res))
     } catch (err) {
-      console.error("❌", err);
+      console.error("❌ Failed to fetch game:", err);
+      setError("Failed to load game");
     } finally {
-      setSubmitting(false);
+      setLoading(false);
     }
   };
 
-  useEffect(() => {
-    const fetchGame = async () => {
-      const token = localStorage.getItem("token");
-      if (!token || !moduleId || !gameId) {
-        setError("Missing token, module ID, or game ID.");
-        setLoading(false);
-        return;
-      }
+  fetchGame();
+}, [moduleId, gameId]);
 
-      try {
-        const res = await fetch(
-          `http://localhost:5000/api/module/${moduleId}/game/${gameId}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (!res.ok) throw new Error(await res.text());
-
-        const data = await res.json();
-        const flashcards = data.game?.items || [];
-        setGameTitle(data?.game?.title || "FlashCard Duel");
-        setCards(flashcards);
-      } catch (err) {
-        setError("Failed to load Flashcard Duel.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchGame();
-  }, [moduleId, gameId]);
 
   if (loading)
     return <div className="text-center mt-10">⏳ Loading Flashcards...</div>;

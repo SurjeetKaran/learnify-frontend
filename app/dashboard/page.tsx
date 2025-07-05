@@ -9,6 +9,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import api from "@/lib/api";
 import { useRouter } from "next/navigation";
 import {
   calculateCourseScore,
@@ -97,71 +98,50 @@ export default function DashboardPage() {
   const router = useRouter();
 
   useEffect(() => {
-    const fetchDashboard = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) return;
+  const fetchDashboard = async () => {
+    try {
+      const data: DashboardData = await api.get("/dashboard");
 
-      const res = await fetch("http://localhost:5000/api/dashboard", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      const data: DashboardData = await res.json();
       setUser({ name: data.name, grade: data.grade, board: data.board });
       setCourseModules(data.courseModules);
 
       const greet = greetings[Math.floor(Math.random() * greetings.length)];
       const head =
-        staticCourseHeadings[
-          Math.floor(Math.random() * staticCourseHeadings.length)
-        ];
+        staticCourseHeadings[Math.floor(Math.random() * staticCourseHeadings.length)];
       setGreeting(greet.replace("{name}", data.name));
       setHeading(head);
-    };
-
-    fetchDashboard();
-  }, []);
-
-  const confirmDelete = (e: React.MouseEvent, id: string) => {
-    e.stopPropagation();
-    setDeleteState({ ...deleteState, confirmId: id });
-  };
-
-  const cancelDelete = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setDeleteState({ confirmId: null, deletingId: null });
-  };
-
-  const deleteCourse = async (e: React.MouseEvent, id: string) => {
-    e.stopPropagation();
-    const token = localStorage.getItem("token");
-    if (!token) return;
-
-    try {
-      setDeleteState({ confirmId: null, deletingId: id });
-
-      const res = await fetch(
-        `${
-          process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000"
-        }/api/courses/${id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (!res.ok) throw new Error("Failed to delete course");
-
-      setCourseModules((prev) => prev.filter((c) => c.courseId !== id));
     } catch (err) {
-      console.error("❌ Failed to delete:", err);
-      alert("Failed to delete course.");
-    } finally {
-      setDeleteState({ confirmId: null, deletingId: null });
+      console.error("❌ Failed to fetch dashboard:", err);
     }
   };
+
+  fetchDashboard();
+}, []);
+
+const confirmDelete = (e: React.MouseEvent, id: string) => {
+  e.stopPropagation();
+  setDeleteState({ ...deleteState, confirmId: id });
+};
+
+const cancelDelete = (e: React.MouseEvent) => {
+  e.stopPropagation();
+  setDeleteState({ confirmId: null, deletingId: null });
+};
+
+const deleteCourse = async (e: React.MouseEvent, id: string) => {
+  e.stopPropagation();
+
+  try {
+    setDeleteState({ confirmId: null, deletingId: id });
+
+    await api.delete(`/courses/${id}`);
+    setCourseModules((prev) => prev.filter((c) => c.courseId !== id));
+  } catch (err) {
+    console.error("❌ Failed to delete course:", err);
+  } finally {
+    setDeleteState({ confirmId: null, deletingId: null });
+  }
+};
 
   if (!user) {
     return (

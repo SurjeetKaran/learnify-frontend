@@ -43,9 +43,10 @@ export default function GetProfilePage() {
         setValue("grade", data.grade);
         setValue("board", data.board);
       } catch (err) {
-        console.error("Error fetching profile:", err);
+        console.error("❌ Error fetching profile:", err);
       }
     };
+
     fetchProfile();
   }, [setValue]);
 
@@ -55,6 +56,7 @@ export default function GetProfilePage() {
         setStatusMessage("");
         setStatusType("");
       }, 3500);
+
       return () => clearTimeout(timer);
     }
   }, [statusMessage]);
@@ -66,7 +68,7 @@ export default function GetProfilePage() {
       setStatusMessage("✅ Profile updated successfully!");
       setStatusType("success");
     } catch (err) {
-      console.error("Update failed:", err);
+      console.error("❌ Update failed:", err);
       setStatusMessage("❌ Failed to update profile.");
       setStatusType("error");
     } finally {
@@ -76,18 +78,27 @@ export default function GetProfilePage() {
 
   const handleDelete = async () => {
     if (!deleteReason || !deletePassword) return;
+
     try {
       setLoading(true);
       await api.delete("/users/me", {
-        data: { reason: deleteReason, password: deletePassword },
+        data: {
+          reason: deleteReason,
+          password: deletePassword,
+        },
       });
+
       setStatusMessage("✅ Account deleted successfully");
       setStatusType("success");
+
+      // Clear session/token
       localStorage.clear();
       document.cookie = "token=; Max-Age=0; path=/;";
+
+      // Redirect after short delay
       setTimeout(() => router.push("/auth/login"), 1500);
     } catch (err) {
-      console.error("Delete failed:", err);
+      console.error("❌ Delete failed:", err);
       setStatusMessage("❌ Failed to delete account. Check password.");
       setStatusType("error");
     } finally {

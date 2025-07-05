@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -12,6 +10,7 @@ import {
 } from "lucide-react";
 import { useRouter, useParams } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
+import api from "@/lib/api";
 
 type ConceptPair = {
   term: string;
@@ -52,22 +51,12 @@ export default function ConceptMatchGame() {
       }
 
       try {
-        const res = await fetch(
-          `http://localhost:5000/api/module/${moduleId}/game/${gameId}`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const res = await api.get(`/module/${moduleId}/game/${gameId}`);
+        const data = res.data;
 
-        if (!res.ok) throw new Error(await res.text());
-
-        const data = await res.json();
         setPairs(data.game?.items || []);
         setGameTitle(data?.game?.title || "Concept Match");
-      } catch (err) {
+      } catch (err: any) {
         console.error("❌ Failed to fetch concept match:", err);
         setError("Failed to load Concept Match.");
       } finally {
@@ -118,57 +107,22 @@ export default function ConceptMatchGame() {
     setSubmitError("");
 
     try {
-      // 1. Submit game result (basic validation)
-      const gamePayload = {
-        score,
-        total: pairs.length,
-      };
-
+      const gamePayload = { score, total: pairs.length };
       console.log("📤 [1] Submitting game score:", gamePayload);
 
-      const gameRes = await fetch(
-        `http://localhost:5000/api/module/${moduleId}/game/${gameId}/submit`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(gamePayload),
-        }
-      );
-
-      if (!gameRes.ok) {
-        const text = await gameRes.text();
-        console.error("❌ [1] Game submission failed:", text);
-        throw new Error("Game submission failed");
-      }
-
+      await api.post(`/module/${moduleId}/game/${gameId}/submit`, gamePayload);
       console.log("✅ [1] Game submitted");
 
-      // 2. Fetch dashboard to extract course + module title
-      const dashRes = await fetch(`http://localhost:5000/api/dashboard`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      if (!dashRes.ok) {
-        const text = await dashRes.text();
-        console.error("❌ [2] Dashboard fetch failed:", text);
-        throw new Error("Failed to fetch dashboard");
-      }
-
-      const dashboard = await dashRes.json();
+      const dashboard = await api.get("/dashboard");
 
       const course = dashboard.courseModules.find((c: any) =>
         c.completedModules.some((m: any) => m.moduleId === moduleId)
       );
-
       if (!course) throw new Error("❌ Active course not found for module");
 
       const module = course.completedModules.find(
         (m: any) => m.moduleId === moduleId
       );
-
       if (!module) throw new Error("❌ Module not found in course");
 
       const dashboardPayload = {
@@ -187,23 +141,9 @@ export default function ConceptMatchGame() {
       };
 
       console.log("📤 [3] Submitting dashboard payload:", dashboardPayload);
-
-      const saveRes = await fetch(`http://localhost:5000/api/dashboard/save`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(dashboardPayload),
-      });
-
-      if (!saveRes.ok) {
-        const text = await saveRes.text();
-        console.error("❌ [3] Dashboard save failed:", text);
-        throw new Error("Dashboard save failed");
-      }
-
+      await api.post("/dashboard/save", dashboardPayload);
       console.log("✅ [3] Dashboard progress saved");
+
       setSubmitted(true);
     } catch (err: any) {
       console.error("❌ Error during submit:", err.message || err);
@@ -364,7 +304,7 @@ export default function ConceptMatchGame() {
       </AnimatePresence>
 
       {/* Floating Buttons */}
-        <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3">
+      <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}

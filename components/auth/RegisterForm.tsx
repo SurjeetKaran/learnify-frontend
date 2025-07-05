@@ -9,6 +9,8 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { motion } from 'framer-motion';
+import api from '@/lib/api';
+
 
 const schema = z.object({
   name: z.string().min(2, { message: 'Name is required' }),
@@ -33,27 +35,21 @@ export default function RegisterForm() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const onSubmit = async (data: RegisterFormData) => {
-    setLoading(true);
-    try {
-      const res = await fetch('http://localhost:5000/api/users/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
+ const onSubmit = async (data: RegisterFormData) => {
+  setLoading(true);
+  try {
+    const result = await api.post('/users/register', data);
 
-      const result = await res.json();
-      if (!res.ok) throw new Error(result.error || 'Registration failed');
+    localStorage.setItem('token', result.token);
+    localStorage.setItem('user', JSON.stringify(result.user));
+    router.push('/dashboard');
+  } catch (err: any) {
+    alert(err?.response?.data?.error || err.message || 'Registration failed');
+  } finally {
+    setLoading(false);
+  }
+};
 
-      localStorage.setItem('token', result.token);
-      localStorage.setItem('user', JSON.stringify(result.user));
-      router.push('/dashboard');
-    } catch (err: any) {
-      alert(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <div className="bg-transparent text-white min-h-screen flex items-center justify-center px-4 relative">

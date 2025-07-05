@@ -6,6 +6,7 @@ import ThemeToggle from "@/components/ui/ThemeToggle";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { Menu, X, LogOut } from "lucide-react";
+import api from "@/lib/api";
 
 const navItems = [
   { name: "Dashboard", href: "/dashboard" },
@@ -27,33 +28,19 @@ export default function Navbar() {
     );
   }, []);
 
-  const handleLogout = async () => {
-    try {
-      const token = localStorage.getItem("token");
+const handleLogout = async () => {
+  try {
+    await api.post("/users/logout", {}); // 👈 required empty body
+  } catch (err) {
+    console.error("❌ Failed to call logout API:", err);
+  }
 
-      if (token) {
-        await fetch(
-          `${
-            process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000"
-          }/api/users/logout`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-      }
-    } catch (err) {
-      console.error("❌ Failed to call logout API:", err);
-    }
+  // ✅ Clear localStorage and redirect
+  localStorage.clear();
+  router.push("/auth/login");
+};
 
-    // ✅ Only clear localStorage (preserves cookies)
-    localStorage.clear();
 
-    router.push("/auth/login");
-  };
 
   return (
     <nav className="w-full bg-white dark:bg-[#121212] border-b border-gray-200 dark:border-gray-700 shadow-sm px-4 py-3 sticky top-0 z-50">

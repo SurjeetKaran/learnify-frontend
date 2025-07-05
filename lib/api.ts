@@ -2,11 +2,11 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:5000/api',
-  withCredentials: true, // send cookies if needed
+  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api',
+  withCredentials: true, // Send cookies if needed
 });
 
-// Attach Bearer token from localStorage
+// ✅ Attach Bearer token from localStorage for authenticated requests
 instance.interceptors.request.use(
   (config) => {
     if (typeof window !== 'undefined') {
@@ -20,7 +20,7 @@ instance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Generic API wrapper
+// ✅ Generic API wrapper
 const api = {
   get: <T = any>(url: string, config?: any) =>
     instance.get<T>(url, config).then((res) => res.data),
@@ -39,4 +39,5 @@ const api = {
 };
 
 export default api;
+
 

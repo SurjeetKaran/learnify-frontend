@@ -7,8 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { History, Bot } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-
-const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+import api from "@/lib/api";
 
 const doubtSchema = z.object({
   question: z.string().min(3, "Enter your question"),
@@ -57,25 +56,19 @@ export default function DoubtChatPage() {
     setLoading(true);
 
     try {
-      const token = localStorage.getItem("token");
-      if (!token) throw new Error("No auth token found");
-
-      const res = await fetch(`${baseUrl}/api/doubt`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ question: data.question }),
+      const response = await api.post("/doubt", {
+        question: data.question,
       });
 
-      const json = await res.json();
-      if (!json?.doubt?.answer) throw new Error("No answer received");
+      if (!response?.doubt?.answer) {
+        throw new Error("No answer received");
+      }
 
       const aiMessage: Message = {
         role: "ai",
-        text: `🤖 ${json.doubt.answer}`,
+        text: `🤖 ${response.doubt.answer}`,
       };
+
       setChat((prev) => [...prev, aiMessage]);
     } catch (err) {
       setChat((prev) => [

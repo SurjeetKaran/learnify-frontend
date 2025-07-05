@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -12,7 +11,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { saveDashboardProgress } from "@/lib/dashboard";
-import { BACKEND_URL } from "@/lib/config";
+import api from "@/lib/api";
 
 type Scene = {
   story: string;
@@ -42,7 +41,6 @@ export default function StoryModeGame() {
   const [submitError, setSubmitError] = useState("");
   const [gameTitle, setGameTitle] = useState("Story Mode");
 
-
   const current = scenes[step];
 
   useEffect(() => {
@@ -55,17 +53,7 @@ export default function StoryModeGame() {
       }
 
       try {
-        const res = await fetch(
-          `http://localhost:5000/api/module/${moduleId}/game/${gameId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (!res.ok) throw new Error(await res.text());
-        const data = await res.json();
+        const data = await api.get(`/module/${moduleId}/game/${gameId}`);
         setScenes(data?.game?.items || []);
         setGameTitle(data?.game?.title || "Story Mode");
       } catch (err) {
@@ -128,56 +116,30 @@ export default function StoryModeGame() {
     setSubmitError("");
 
     try {
-      // 1. Submit game result (basic validation)
+      // [1] Submit game result
       const gamePayload = {
         score,
         total: scenes.length,
       };
 
       console.log("📤 [1] Submitting game score:", gamePayload);
-
-      const gameRes = await fetch(
-        `${BACKEND_URL}/api/module/${moduleId}/game/${gameId}/submit`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(gamePayload),
-        }
-      );
-
-      if (!gameRes.ok) {
-        const text = await gameRes.text();
-        console.error("❌ [1] Game submission failed:", text);
-        throw new Error("Game submission failed");
-      }
-
+      await api.post(`/module/${moduleId}/game/${gameId}/submit`, gamePayload);
       console.log("✅ [1] Game submitted");
 
-      // 2. Get dashboard and extract info
-      const dashRes = await fetch(`${BACKEND_URL}/api/dashboard`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      // [2] Fetch dashboard data
+      const dashboard = await api.get("/dashboard");
 
-      if (!dashRes.ok) {
-        const text = await dashRes.text();
-        console.error("❌ [2] Dashboard fetch failed:", text);
-        throw new Error("Failed to fetch dashboard");
-      }
-
-      const dashboard = await dashRes.json();
       const course = dashboard.courseModules.find((c: any) =>
         c.completedModules.some((m: any) => m.moduleId === moduleId)
       );
-
       if (!course) throw new Error("❌ Active course not found for module");
+
       const module = course.completedModules.find(
         (m: any) => m.moduleId === moduleId
       );
       if (!module) throw new Error("❌ Module not found in course");
 
+      // [3] Submit dashboard progress
       const dashboardPayload = {
         courseId: course.courseId,
         completedModule: {
@@ -194,23 +156,9 @@ export default function StoryModeGame() {
       };
 
       console.log("📤 [3] Submitting dashboard payload:", dashboardPayload);
-
-      const saveRes = await fetch(`${BACKEND_URL}/api/dashboard/save`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(dashboardPayload),
-      });
-
-      if (!saveRes.ok) {
-        const text = await saveRes.text();
-        console.error("❌ [3] Dashboard save failed:", text);
-        throw new Error("Dashboard save failed");
-      }
-
+      await api.post("/dashboard/save", dashboardPayload);
       console.log("✅ [3] Dashboard progress saved");
+
       setSubmitted(true);
     } catch (err: any) {
       console.error("❌ Error during submit:", err.message || err);
@@ -247,7 +195,7 @@ export default function StoryModeGame() {
         />
 
         <h2 className="text-2xl font-bold text-blue-600 dark:text-pink-400">
-           {gameTitle}
+          {gameTitle}
         </h2>
 
         {!finished ? (
@@ -414,4 +362,3 @@ export default function StoryModeGame() {
     </>
   );
 }
-

@@ -11,7 +11,7 @@ import {
   Sparkles,
   HelpCircle,
 } from "lucide-react";
-import { BACKEND_URL } from "@/lib/config";
+import api from "@/lib/api";
 
 export default function ReadingModulePage() {
   const { id } = useParams();
@@ -37,34 +37,21 @@ export default function ReadingModulePage() {
 
   useEffect(() => {
     const fetchModuleAndProgress = async () => {
-      const token = localStorage.getItem("token");
-      if (!token || typeof id !== "string") {
-        setError("⚠️ Missing token or module ID.");
+      if (typeof id !== "string") {
+        setError("⚠️ Invalid module ID.");
         return;
       }
 
       try {
-        const res = await fetch(`${BACKEND_URL}/api/courses/module/${id}`, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        // Fetch module data
+        const moduleData = await api.get(`/courses/module/${id}`);
+        setModule(moduleData.module);
 
-        if (!res.ok) throw new Error(await res.text());
-        const data = await res.json();
-        setModule(data.module);
-
-        const dashboardRes = await fetch(`${BACKEND_URL}/api/dashboard`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        const dashboard = await dashboardRes.json();
+        // Fetch dashboard for progress
+        const dashboard = await api.get("/dashboard");
 
         const courseProgress = dashboard.courseModules?.find(
-          (c: any) => c.courseId === data.module.courseId
+          (c: any) => c.courseId === moduleData.module.courseId
         );
 
         const completed = courseProgress?.completedModules?.some(
@@ -85,9 +72,8 @@ export default function ReadingModulePage() {
   }, [id]);
 
   const handleComplete = async () => {
-    const token = localStorage.getItem("token");
-    if (!token || !module?.courseId) {
-      console.error("⚠️ Missing token or courseId");
+    if (!module?.courseId) {
+      console.error("⚠️ Missing courseId");
       return;
     }
 
@@ -102,26 +88,12 @@ export default function ReadingModulePage() {
     console.log("📦 Payload being sent to /api/dashboard/save:", payload);
 
     try {
-      const res = await fetch(`${BACKEND_URL}/api/dashboard/save`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(payload),
-      });
-
-      const result = await res.json();
+      const result = await api.post("/dashboard/save", payload);
       console.log("✅ Dashboard update result:", result);
-
-      if (res.ok) {
-        setIsComplete(true);
-      } else {
-        throw new Error(result.error || "Failed to save progress");
-      }
-    } catch (err) {
+      setIsComplete(true);
+    } catch (err: any) {
       console.error("❌ Dashboard sync failed:", err);
-      alert("Failed to mark as complete.");
+      setError("Failed to mark as complete.");
     }
   };
 
@@ -134,10 +106,8 @@ export default function ReadingModulePage() {
   };
 
   const handleGoToGames = async () => {
-    const token = localStorage.getItem("token");
-
-    if (!token || typeof id !== "string") {
-      alert("Missing token or module ID.");
+    if (typeof id !== "string") {
+      console.error("⚠️ Missing module ID.");
       return;
     }
 
@@ -145,36 +115,15 @@ export default function ReadingModulePage() {
       setIsGeneratingGames(true);
 
       // ✅ Step 1: Check if games already exist
-      const checkRes = await fetch(
-        `${BACKEND_URL}/api/module/${id}/check-games`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (!checkRes.ok) throw new Error(await checkRes.text());
-      const data = await checkRes.json();
-      const games = data.games;
+      const checkData = await api.get(`/module/${id}/check-games`);
+      const games = checkData.games;
 
       if (!games || games.length === 0) {
-        // ✅ Step 2: Generate games if not found
-        const genRes = await fetch(
-          `${BACKEND_URL}/api/module/${id}/generate-games-from-content`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
+        // ✅ Step 2: Generate games if none exist
+        const { message, count } = await api.post(
+          `/module/${id}/generate-games-from-content`,
+          {}
         );
-
-        if (!genRes.ok) throw new Error(await genRes.text());
-
-        const { message, count } = await genRes.json();
         console.log(`✅ ${count} new games generated for module ${id}`);
       } else {
         console.log("✅ Games already exist, skipping generation");
@@ -184,7 +133,7 @@ export default function ReadingModulePage() {
       router.push(`/game?moduleId=${id}`);
     } catch (err) {
       console.error("❌ Error checking or generating games:", err);
-      alert("Something went wrong. Please try again.");
+      // You can optionally set a toast or UI message here
     } finally {
       setIsGeneratingGames(false);
     }
@@ -369,7 +318,7 @@ export default function ReadingModulePage() {
         </>
       )}
 
-        {/* Floating Buttons */}
+      {/* Floating Buttons */}
       <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -417,5 +366,3 @@ function ContentSection({ title, body }: { title: string; body: string }) {
     </div>
   );
 }
-
-
