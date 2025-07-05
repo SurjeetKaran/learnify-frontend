@@ -1,16 +1,13 @@
-
-
 'use client';
 
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { motion } from 'framer-motion';
 import api from '@/lib/api';
-
 
 const schema = z.object({
   name: z.string().min(2, { message: 'Name is required' }),
@@ -35,20 +32,27 @@ export default function RegisterForm() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
- const onSubmit = async (data: RegisterFormData) => {
-  setLoading(true);
-  try {
-    const result = await api.post('/users/register', data);
+  // ✅ Force dark theme for this page only
+  useEffect(() => {
+    document.documentElement.classList.add('dark');
+    return () => {
+      document.documentElement.classList.remove('dark');
+    };
+  }, []);
 
-    localStorage.setItem('token', result.token);
-    localStorage.setItem('user', JSON.stringify(result.user));
-    router.push('/dashboard');
-  } catch (err: any) {
-    alert(err?.response?.data?.error || err.message || 'Registration failed');
-  } finally {
-    setLoading(false);
-  }
-};
+  const onSubmit = async (data: RegisterFormData) => {
+    setLoading(true);
+    try {
+      const result = await api.post('/users/register', data);
+      localStorage.setItem('token', result.token);
+      localStorage.setItem('user', JSON.stringify(result.user));
+      router.push('/dashboard');
+    } catch (err: any) {
+      alert(err?.response?.data?.error || err.message || 'Registration failed');
+    } finally {
+      setLoading(false);
+    }
+  };
 
 
   return (
@@ -171,5 +175,3 @@ export default function RegisterForm() {
     </div>
   );
 }
-
-

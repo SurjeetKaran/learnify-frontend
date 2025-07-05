@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import api from "@/lib/api";
 import { z } from "zod";
@@ -17,7 +17,7 @@ type FeedbackFormData = z.infer<typeof feedbackSchema>;
 
 export default function FeedbackPage() {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
   const {
@@ -30,15 +30,28 @@ export default function FeedbackPage() {
   });
 
   const onSubmit = async (data: FeedbackFormData) => {
+    if (submitting) return;
+
+    setSubmitting(true);
     try {
       await api.post("/feedback", data); // token auto-included via interceptor
       console.log("✅ Feedback submitted!");
-      // Optionally reset form, show toast, etc.
+      setSubmitted(true);
+      reset();
     } catch (err) {
       console.error("❌ Failed to submit feedback:", err);
-      // Optionally show error message
+    } finally {
+      setSubmitting(false);
     }
   };
+
+  // Optional: Redirect to dashboard after success
+  useEffect(() => {
+    if (submitted) {
+      const timeout = setTimeout(() => router.push("/dashboard"), 3000);
+      return () => clearTimeout(timeout);
+    }
+  }, [submitted, router]);
 
   return (
     <div className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden">
@@ -117,12 +130,12 @@ export default function FeedbackPage() {
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={submitting}
               className={`w-full py-3 rounded-md text-white font-semibold bg-gradient-to-r from-blue-500 to-purple-600 dark:from-pink-500 dark:to-purple-700 hover:scale-105 transition-transform duration-200 shadow-lg ${
-                loading ? "opacity-50 cursor-not-allowed" : ""
+                submitting ? "opacity-50 cursor-not-allowed" : ""
               }`}
             >
-              {loading ? "Sending..." : "Submit Feedback"}
+              {submitting ? "Sending..." : "Submit Feedback"}
             </button>
           </motion.form>
         )}

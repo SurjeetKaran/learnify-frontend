@@ -1,16 +1,24 @@
-
-
 'use client';
 
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function Home() {
   const router = useRouter();
 
+  useEffect(() => {
+    // Add dark class when component mounts
+    document.documentElement.classList.add('dark');
+
+    return () => {
+      // Optional: Remove dark class when navigating away
+      document.documentElement.classList.remove('dark');
+    };
+  }, []);
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-between px-6 py-12 bg-transparent text-gray-900 dark:text-white transition-colors duration-300">
       <main className="flex flex-col items-center text-center space-y-8 mt-10 max-w-xl">
-        {/* 🔠 Logo */}
         <span className="text-5xl font-extrabold text-blue-600 dark:text-pink-400 tracking-tight">
           Learnify
         </span>

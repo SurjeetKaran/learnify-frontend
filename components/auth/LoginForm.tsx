@@ -1,5 +1,3 @@
-
-
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -32,6 +30,14 @@ export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState('');
   const [showMessage, setShowMessage] = useState(false);
+
+  // ✅ Force dark theme on this page only
+  useEffect(() => {
+    document.documentElement.classList.add('dark');
+    return () => {
+      document.documentElement.classList.remove('dark');
+    };
+  }, []);
 
   useEffect(() => {
     if (loginError) {
@@ -66,7 +72,6 @@ export default function LoginForm() {
 
   return (
     <div className="bg-transparent text-white min-h-screen flex items-center justify-center px-4 relative">
-
       {/* 🌈 Glowing Background */}
       <motion.div
         className="absolute -z-10 w-[600px] h-[600px] rounded-full bg-gradient-to-r from-pink-500 via-purple-600 to-blue-500 opacity-40 blur-3xl animate-spin-slow"
