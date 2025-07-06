@@ -2,7 +2,7 @@
   "name": "Learnify",
   "short_name": "Learnify",
   "description": "Personalized, gamified AI learning platform",
-  "start_url": "/",
+  "start_url": "/auth/login",
   "display": "standalone",
   "background_color": "#0f172a",
   "theme_color": "#0ea5e9",
