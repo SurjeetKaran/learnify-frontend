@@ -65,6 +65,7 @@ export default function GetProfilePage() {
     try {
       setLoading(true);
       await api.put("/users/update-profile", data);
+
       setStatusMessage("✅ Profile updated successfully!");
       setStatusType("success");
     } catch (err) {
