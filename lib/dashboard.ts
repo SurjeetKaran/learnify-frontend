@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:5000";
+
 
 // ========== Types ==========
 export type GameResult = {
@@ -59,7 +59,7 @@ export async function saveDashboardProgress(payload: SaveDashboardProgressPayloa
   const token = localStorage.getItem("token");
   if (!token) throw new Error("Missing auth token");
 
-  const res = await fetch(`${BASE_URL}/api/dashboard/save`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/dashboard/save`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -92,7 +92,7 @@ export async function fetchDashboard() {
   const token = localStorage.getItem("token");
   if (!token) throw new Error("Missing auth token");
 
-  const res = await fetch(`${BASE_URL}/api/dashboard`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/dashboard`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -121,7 +121,7 @@ export async function fetchModuleGameResults(moduleId: string, courseId: string)
   if (!token) throw new Error("Missing auth token");
 
   const res = await fetch(
-    `${BASE_URL}/api/dashboard/module/${moduleId}/results?courseId=${courseId}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/dashboard/module/${moduleId}/results?courseId=${courseId}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
