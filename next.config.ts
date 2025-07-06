@@ -1,10 +1,17 @@
 import type { NextConfig } from "next";
+import withPWA from "next-pwa";
 
 const nextConfig: NextConfig = {
   eslint: {
-    ignoreDuringBuilds: true, // ✅ Ignore ESLint errors in production builds
+    ignoreDuringBuilds: true,
   },
-  // Add other config options here if needed
+  // Other Next.js config options...
 };
 
-export default nextConfig;
+export default withPWA({
+  dest: "public",
+  register: true,
+  skipWaiting: true,
+  disable: process.env.NODE_ENV === "development",
+})(nextConfig);
+

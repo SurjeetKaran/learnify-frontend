@@ -81,10 +81,18 @@ export default function LoginForm() {
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-full max-w-md bg-white dark:bg-[#121212] text-black dark:text-white p-8 rounded-xl shadow-2xl border border-blue-200 dark:border-pink-500/30 backdrop-blur-md space-y-6 animate-slide-up"
-      >
-        <h2 className="text-3xl font-bold text-center text-blue-600 dark:text-pink-400">
-          Welcome Back 🎓
+      className="w-full max-w-md bg-black/30 dark:bg-black/50 text-white p-8 rounded-xl shadow-xl border border-pink-500/30 backdrop-blur-lg backdrop-saturate-150 transition-all duration-300 space-y-6 animate-slide-up"
+>
+        <h2 className="text-3xl font-bold text-center text-blue-600 dark:text-blue-600 flex items-center justify-center gap-3">
+          <span>Back to</span>
+          <span className="flex items-center gap-[2px]">
+            <img
+              src="/Learnify.svg"
+              alt="Learnify Logo"
+              className="h-10 w-10"
+            />
+            earnify
+          </span>
         </h2>
         <p className="text-center text-gray-600 dark:text-gray-400">
           Log in to continue your learning adventure!
@@ -147,7 +155,7 @@ export default function LoginForm() {
         <button
           type="submit"
           disabled={loading}
-          className={`w-full py-3 rounded-md text-white font-semibold bg-gradient-to-r from-blue-500 to-purple-600 dark:from-pink-500 dark:to-purple-700 hover:scale-105 transition-transform duration-200 shadow-lg ${
+          className={`w-full py-3 rounded-md text-white font-semibold bg-gradient-to-r from-blue-500 to-purple-600 dark:from-purple-500 dark:to-blue-700 hover:scale-105 transition-transform duration-200 shadow-lg ${
             loading ? 'opacity-50 cursor-not-allowed' : ''
           }`}
         >

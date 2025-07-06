@@ -28,31 +28,30 @@ export default function Navbar() {
     );
   }, []);
 
-const handleLogout = async () => {
-  try {
-    await api.post("/users/logout", {}); // 👈 required empty body
-  } catch (err) {
-    console.error("❌ Failed to call logout API:", err);
-  }
+  const handleLogout = async () => {
+    try {
+      await api.post("/users/logout", {}); // 👈 required empty body
+    } catch (err) {
+      console.error("❌ Failed to call logout API:", err);
+    }
 
-  // ✅ Clear localStorage and redirect
-  localStorage.clear();
-  router.push("/auth/login");
-};
-
-
+    // ✅ Clear localStorage and redirect
+    localStorage.clear();
+    router.push("/auth/login");
+  };
 
   return (
     <nav className="w-full bg-white dark:bg-[#121212] border-b border-gray-200 dark:border-gray-700 shadow-sm px-4 py-3 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Left: Logo and nav links */}
         <div className="flex items-center space-x-6">
-          <Link
-            href="/"
-            className="text-xl font-bold text-blue-600 dark:text-pink-400"
-          >
-            Learnify
+          <Link href="/dashboard" className="flex items-center gap-[2px]">
+            <img src="/Learnify.svg" alt="Learnify Logo" className="h-7 w-7" />
+            <span className="text-xl font-bold text-blue-600 dark:text-blue-600">
+              earnify
+            </span>
           </Link>
+
           <div className="hidden sm:flex items-center space-x-6 text-sm font-medium text-gray-700 dark:text-gray-300">
             {navItems.map((item) => (
               <Link

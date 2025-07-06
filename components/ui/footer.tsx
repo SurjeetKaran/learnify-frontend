@@ -11,9 +11,12 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-3 gap-8">
         {/* Brand & Description */}
         <div>
-          <h2 className="text-lg font-bold text-blue-600 dark:text-pink-400">
-            Learnify
-          </h2>
+          <Link href="/dashboard" className="flex items-center gap-[2px]">
+            <img src="/Learnify.svg" alt="Learnify Logo" className="h-7 w-7" />
+            <span className="text-xl font-bold text-blue-600 dark:text-blue-600">
+              earnify
+            </span>
+          </Link>
           <p className="mt-2 text-sm">
             Empowering students with personalized, intelligent learning
             experiences.
