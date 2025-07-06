@@ -1,11 +1,28 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { FaLinkedin, FaGithub } from "react-icons/fa";
 import { HiOutlineMail } from "react-icons/hi";
 import { FcGoogle } from "react-icons/fc";
 
 export default function Footer() {
+  const [isStandalone, setIsStandalone] = useState(false);
+
+  useEffect(() => {
+    const checkStandalone = () => {
+      const isInStandalone =
+        window.matchMedia("(display-mode: standalone)").matches ||
+        (window.navigator as any).standalone === true;
+
+      setIsStandalone(isInStandalone);
+    };
+
+    checkStandalone();
+  }, []);
+
+  if (isStandalone) return null;
+
   return (
     <footer className="w-full bg-white dark:bg-[#121212] border-t border-gray-200 dark:border-gray-700 text-sm text-gray-600 dark:text-gray-400 py-6 mt-12">
       <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-3 gap-8">
@@ -50,7 +67,6 @@ export default function Footer() {
             >
               <FaGithub />
             </a>
-
             <a
               href="mailto:support@learnify.com"
               aria-label="Email"
@@ -80,7 +96,6 @@ export default function Footer() {
                 Ask a Doubt
               </Link>
             </li>
-
             <li>
               <Link href="/profile" className="hover:underline">
                 Profile

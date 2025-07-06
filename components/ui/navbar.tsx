@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 import { cn } from "@/lib/utils";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Menu, X, LogOut } from "lucide-react";
 import api from "@/lib/api";
 
@@ -19,14 +19,6 @@ export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [avatarUrl, setAvatarUrl] = useState("");
-
-  useEffect(() => {
-    const stored = localStorage.getItem("user-avatar");
-    setAvatarUrl(
-      stored || "https://api.dicebear.com/7.x/lorelei/svg?seed=student"
-    );
-  }, []);
 
   const handleLogout = async () => {
     try {
