@@ -50,7 +50,7 @@ export default function Footer() {
               <FcGoogle />
             </a>
             <a
-              href="www.linkedin.com/in/surjeet-karan"
+              href="https://www.linkedin.com/in/surjeet-karan"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn"
@@ -68,7 +68,7 @@ export default function Footer() {
               <FaGithub />
             </a>
             <a
-              href="surjeetkaran777@gmail.com"
+              href="/feedback"
               aria-label="Email"
               className="hover:text-pink-500"
             >
