@@ -69,17 +69,16 @@ export default function RegisterForm() {
         onSubmit={handleSubmit(onSubmit)}
              className="w-full max-w-md bg-black/30 dark:bg-black/50 text-white p-8 rounded-xl shadow-xl border border-pink-500/30 backdrop-blur-lg backdrop-saturate-150 transition-all duration-300 space-y-6 animate-slide-up"
 >
-        <h2 className="text-3xl font-bold text-center text-blue-600 dark:text-blue-600 flex items-center justify-center gap-3">
-          <span>Level Up with</span>
-          <span className="flex items-center gap-[2px]">
-            <img
-              src="/Learnify.svg"
-              alt="Learnify Logo"
-              className="h-10 w-10"
-            />
-            earnify
-          </span>
-        </h2>
+       <h2 className="text-3xl font-bold text-center text-blue-600 dark:text-blue-600">
+  <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
+    <span>Level Up with</span>
+    <span className="flex items-center gap-1">
+      <img src="/Learnify.svg" alt="Learnify Logo" className="h-10 w-10" />
+      <span>earnify</span>
+    </span>
+  </div>
+</h2>
+
 
         <p className="text-center text-gray-600 dark:text-gray-400">
           Kickstart your learning journey!
