@@ -50,7 +50,7 @@ export default function Footer() {
               <FcGoogle />
             </a>
             <a
-              href="https://linkedin.com"
+              href="www.linkedin.com/in/surjeet-karan"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn"
@@ -59,7 +59,7 @@ export default function Footer() {
               <FaLinkedin />
             </a>
             <a
-              href="https://github.com"
+              href="https://github.com/SurjeetKaran/learnify-frontend.git"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="GitHub"
@@ -68,7 +68,7 @@ export default function Footer() {
               <FaGithub />
             </a>
             <a
-              href="mailto:support@learnify.com"
+              href="surjeetkaran777@gmail.com"
               aria-label="Email"
               className="hover:text-pink-500"
             >
