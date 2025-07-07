@@ -268,9 +268,9 @@ export default function ConceptMatchGame() {
               ))}
             </div>
 
-           <>
+<>
   {!submitted ? (
-    <>
+    <div className="flex flex-col gap-2">
       <button
         onClick={() => {
           setIndex(0);
@@ -293,7 +293,7 @@ export default function ConceptMatchGame() {
         <Send size={18} />
         {submitting ? "Submitting..." : "Submit Result"}
       </button>
-    </>
+    </div>
   ) : (
     <button
       onClick={handleBack}
@@ -304,6 +304,7 @@ export default function ConceptMatchGame() {
     </button>
   )}
 </>
+
 
           </motion.div>
         )}
