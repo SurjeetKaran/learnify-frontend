@@ -268,42 +268,43 @@ export default function ConceptMatchGame() {
               ))}
             </div>
 
-            <div className="flex flex-wrap justify-center gap-4 pt-4">
-              {!submitted ? (
-                <>
-                  <button
-                    onClick={() => {
-                      setIndex(0);
-                      setScore(0);
-                      setCompleted(false);
-                      setSubmitted(false);
-                      setLog([]);
-                    }}
-                    className="inline-flex items-center gap-2 px-5 py-2 rounded-md text-white font-medium bg-blue-600 hover:bg-blue-700 transition"
-                  >
-                    <RefreshCcw size={18} />
-                    Retry Game
-                  </button>
+           <>
+  {!submitted ? (
+    <>
+      <button
+        onClick={() => {
+          setIndex(0);
+          setScore(0);
+          setCompleted(false);
+          setSubmitted(false);
+          setLog([]);
+        }}
+        className="w-full inline-flex items-center gap-2 px-5 py-2 rounded-md text-white font-medium bg-blue-600 hover:bg-blue-700 transition"
+      >
+        <RefreshCcw size={18} />
+        Retry Game
+      </button>
 
-                  <button
-                    onClick={handleSubmitResult}
-                    disabled={submitting}
-                    className="inline-flex items-center gap-2 px-5 py-2 rounded-md text-white font-medium bg-green-600 hover:bg-green-700 transition disabled:opacity-50"
-                  >
-                    <Send size={18} />
-                    {submitting ? "Submitting..." : "Submit Result"}
-                  </button>
-                </>
-              ) : (
-                <button
-                  onClick={handleBack}
-                  className="inline-flex items-center gap-2 px-5 py-2 rounded-md text-white font-medium bg-purple-600 hover:bg-purple-700 transition"
-                >
-                  <ArrowLeftCircle size={18} />
-                  Back to Game Modes
-                </button>
-              )}
-            </div>
+      <button
+        onClick={handleSubmitResult}
+        disabled={submitting}
+        className="w-full inline-flex items-center gap-2 px-5 py-2 rounded-md text-white font-medium bg-green-600 hover:bg-green-700 transition disabled:opacity-50"
+      >
+        <Send size={18} />
+        {submitting ? "Submitting..." : "Submit Result"}
+      </button>
+    </>
+  ) : (
+    <button
+      onClick={handleBack}
+      className="w-full inline-flex items-center gap-2 px-5 py-2 rounded-md text-white font-medium bg-purple-600 hover:bg-purple-700 transition"
+    >
+      <ArrowLeftCircle size={18} />
+      Back to Game Modes
+    </button>
+  )}
+</>
+
           </motion.div>
         )}
       </AnimatePresence>
