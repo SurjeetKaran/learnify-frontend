@@ -135,7 +135,11 @@ Developed with ❤️ by **Surjeet Karan**
 
 ---
 
-## 📄 License
+### 📝 License
 
-This project is licensed under the **MIT License**
+This project is open for learning and inspiration.  
+Please **do not plagiarize** the design or personal content.
+
+Code is licensed under the [MIT License](./LICENSE).
+
 

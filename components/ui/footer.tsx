@@ -136,6 +136,20 @@ export default function Footer() {
       <div className="text-center mt-6 text-xs text-gray-500 dark:text-gray-500">
         © 2025 Learnify. All rights reserved.
       </div>
+
+       {/* License Notice */}
+      <div className="text-center mt-1 text-xs text-gray-500 dark:text-gray-500">
+        Code licensed under{" "}
+        <a
+          href="https://opensource.org/licenses/MIT"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline hover:text-blue-600"
+        >
+          MIT License
+        </a>
+        .
+      </div>
     </footer>
   );
 }
